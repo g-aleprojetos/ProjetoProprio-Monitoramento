@@ -7,7 +7,8 @@
  *  Informação do upgrade:
  *  Interrupção,
  *  ArduinoOta,
- *  Configuração de rede
+ *  Configuração de rede,
+ *  fixar Ip
  */
 
 // --- Bibliotecas Auxiliares ---
@@ -24,7 +25,12 @@
 #define SENHADISPOSITIVO "004545"      //configura a senha do despositivo no OTA
 #define   out    D0                    // gpio02 led onbord vermelho
 #endif
+//definição de Ip fixo para NodeMCU
+IPAddress ip(192,168,0,190); //número do ip a ser fixado
+IPAddress gateway(192,168,0,1); //gateway de conexão
+IPAddress subnet(255,255,255,0); //mascara de rede
 
+WiFiServer server(80); //porta de internet a ser aberta
 /************************************************************************************/
 // --- Protótipo das Funções ---
 void startOTA();
@@ -45,6 +51,7 @@ void setup() {
   Serial.println("Booting");                         //escreve o texto no serial
  // WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);                        //passa os parâmetros para a função que vai fazer a conexão com o wifi
+  WiFi.config(ip, gateway, subnet);                  //passa os parâmetros para a função que vai setar o ip fixo no NodeMCU
 
   while (WiFi.status() != WL_CONNECTED) {            //enquanto status for diferente de conectado
        delay(500);                                   //intervalo de 500 milisegundos
@@ -54,7 +61,7 @@ void setup() {
   Serial.print("Conectado a rede sem fio: ");        //escreve o texto no serial
   Serial.println(ssid);                              //escreve o nome da rede wifi no serial
   Serial.println("Servidor iniciado");               //escreve o texto no serial
-
+  server.begin(); //inicia o servidorpara receber dados na porta definida em "WiFiServer server(porta);"
   Serial.print("IP para se conectar ao NodeMCU: ");  //escreve o texto no serial
   Serial.print("http://");                           //escreve o texto no serial
   Serial.println(WiFi.localIP());                    //escreve na serial o IP recebido dentro da rede wifi (o ip nesse caso é recebido automaticamente)
@@ -82,7 +89,7 @@ void ICACHE_RAM_ATTR onTimerISR(){
       timer1_write(100000);
       counter++;                             // incrementa counter
   
-    if(counter == 0x20)                      // counter 
+    if(counter == 0x03)                      // counter 
       {                 // sim...
        digitalWrite(out, !digitalRead(out)); //Inverte o estado da saída de teste
         counter = 0x00;                      //zera o counter
