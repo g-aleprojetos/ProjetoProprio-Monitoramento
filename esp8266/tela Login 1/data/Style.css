@@ -105,6 +105,7 @@ td{
   background: var(--color4);
   padding: 5px;
   border-radius: 0px 3px 3px 0px;
+  
  }
 
 .btn{
@@ -158,4 +159,42 @@ td{
   border-color: var(--color5);
   background-color: var(--color8);
 
+}
+
+/******** Configuração **********/
+
+.bnt-conf{
+display: flex;
+
+}
+
+.wifi{
+ 
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+
+.bnt-estilo-ok{
+  background-color: var(--color8);
+  color: var(--color1);
+  padding: 10px 50px 10px 50px; 
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.bnt-estilo-voltar{
+  background-color: var(--color8);
+  color: var(--color1);
+  padding: 10px 50px 10px 50px; 
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
