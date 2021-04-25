@@ -1,4 +1,14 @@
 {
     "login":"admin",
-    "senha":"admin"
+    "senha":"admin",
+    "id":"id",
+    "ssid":"ssid",
+    "pw":"pw",
+    "masc":"masc",
+    "gat":"gat",
+    "led":"true"
 }
+
+
+
+
