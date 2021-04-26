@@ -20,10 +20,10 @@
             <div class="container">
                 <h1>Bem-Vindo à Interface Web</h1>
                 <nav>
-                    <a href="#">HOME</a>
+                    <a href="Home.html">HOME</a>
                     <a href="#">CONFIGURAÇÃO</a>
-                    <a href="#">SENSORES</a>
-                    <a href="#">REINICIAR</a>
+                    <a href="Sensor.html">SENSORES</a>
+                    <a href="Reboot.html"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
                 </nav>
 
             </div>
@@ -31,6 +31,7 @@
         </header>
         <div class="corpo">
             <div class="container-corpo">
+              <form name="config" action="configSave" method="POST">
                 <table>
                     <tr>
                         <th  colspan="2" class="msg">CONFIGURAÇÃO</th>
@@ -66,22 +67,19 @@
                           <input type="radio" name="led" value="0"#ledOff#> Desligado
                         </td>
                       </tr>
-
+                      <tr>
+                      <th colspan="2" class="msg">
+                      <div class="bnt-conf">
+                        <div class="btn">
+                             <button id = "save" type="submit" value="Gravar" onclick="return confirm ('Gravar a configuração?')" class="bnt-estilo-ok">GRAVAR</button>
+                        </div>
+                    </div>
+                  </th>
+                </tr>
                 </table>
+              </form>
             </div>
         </div>
      </main> 
-     <div class="bnt-conf">
-    <div class="btn">
-              
-        <button id = "btnEntrar" type="button" class="bnt-estilo-ok">OK</button>
-
-    </div>
-    <div class="btn">
-              
-        <button id = "btnEntrar" type="button" class="bnt-estilo-voltar">VOLTAR</button>
-
-    </div>
-</div>
 </body>
 </html>

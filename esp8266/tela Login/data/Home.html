@@ -21,9 +21,9 @@
                 <h1>Bem-Vindo à Interface Web</h1>
                 <nav>
                     <a href="#">HOME</a>
-                    <a href="#">CONFIGURAÇÃO</a>
-                    <a href="#">SENSORES</a>
-                    <a href="#">REINICIAR</a>
+                    <a href="Config.html">CONFIGURAÇÃO</a>
+                    <a href="Sensor.html">SENSORES</a>
+                    <a href="Reboot.html"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
                 </nav>
 
             </div>
@@ -31,6 +31,7 @@
         </header>
         <div class="corpo">
             <div class="container-corpo">
+              <form name="home" action="login" method="POST">
                 <table>
                     <tr>
                         <th  colspan="2" class="msg">INFORMAÇÃO</th>
@@ -71,14 +72,21 @@
                       <tr>
                          <th>TEMPERATURA</th><td>#temp#</td>
                       </tr>
+                      <tr>
+                        <th colspan="2" class="msg">
+                        <div class="bnt-conf">
+                          <div class="btn">
+                            <button id = "sair" type="submit" value="Sair" onclick="return confirm ('Tem certeza que deseja sair?')"  class="bnt-estilo">SAIR</button>
+                          </div>
+                      </div>
+                      </th>
+                      </tr>
+
                 </table>
+              </form>
             </div>
         </div>
      </main> 
-    <div class="btn">
-              
-        <button id = "btnEntrar" type="button" class="bnt-estilo">SAIR</button>
 
-    </div>
 </body>
 </html>
