@@ -17,33 +17,43 @@
 
   #include <ESP8266WiFi.h>
   #include <ESP8266WebServer.h>
-  #include <FS.h>
   #include <DNSServer.h>
   #include <TimeLib.h>
+  #include <FS.h>
   #include <ArduinoJson.h>
+  
 // --- Configuração da rede e dispositivo ---
 const byte        WEBSERVER_PORT          = 80;                 // Porta Servidor Web
 const char*       WEBSERVER_HEADER_KEYS[] = {"User-Agent"};     // Headers do Servidor Web
 const byte        DNSSERVER_PORT          = 53;                 // Porta Servidor DNS
 const byte        LED_PIN                 = LED_BUILTIN;        // ESP8266 possui pino padrão de LED
+String            apWifi                  = "Wifi Automação";   // Nome do Wifi
 
 //--- Estado do LED ---
 const byte      LED_ON                  = LOW;
 const byte      LED_OFF                 = HIGH;
 
 //--- Tamanho do Objeto JSON ---
-const   size_t    JSON_SIZE               = JSON_OBJECT_SIZE(5) + 130;
+const   size_t    JSON_SIZE               = JSON_OBJECT_SIZE(5) + 600;
 
 //--- Instâncias --- 
 ESP8266WebServer  server(WEBSERVER_PORT);                         // Web Server
 DNSServer         dnsServer;                                      // DNS Server
+IPAddress         apIP(192, 168, 4, 1);
 
 //--- Variáveis Globais ---
+char              login[30];    // login
+char              senha[30];    // senha
 char              id[30];       // Identificação do dispositivo
-boolean           ledOn;        // Estado do LED
-word              bootCount;    // Número de inicializações
 char              ssid[30];     // Rede WiFi
 char              pw[30];       // Senha da Rede WiFi
+char              masc[15];     // Marcara 
+char              gat[15];      // gateway
+word              bootCount;    // Número de inicializações
+boolean           ledOn;        // Estado do LED
+char              idSensor[30]; // Identificação do sensor
+int               sensor;       // sensor
+
 
 // --- Protótipo das Funções ---
 
@@ -51,7 +61,7 @@ char              pw[30];       // Senha da Rede WiFi
 //--- Setup ---
 void setup() {
      
-  Serial.begin(74880);          // Velocidade para ESP8266
+  Serial.begin(9600);          // Velocidade para ESP8266
 
   if (!SPIFFS.begin()) {        // SPIFFS
     log(F("SPIFFS ERRO"));
@@ -67,15 +77,14 @@ void setup() {
 
   //--- WiFi Access Point ---
  
-    //--- Configura WiFi para ESP8266 ---
-    WiFi.hostname(deviceID());
-    WiFi.softAP(deviceID(), deviceID());
+    WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+    WiFi.softAP( apWifi );
 
      log("WiFi AP " + deviceID() + " - IP " + ipStr(WiFi.softAPIP()));
 
    //--- Habilita roteamento DNS ---
    dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
-   dnsServer.start(DNSSERVER_PORT, "*", WiFi.softAPIP());
+   dnsServer.start(DNSSERVER_PORT , "*", apIP);
 
   //--- WiFi Station ---
   WiFi.begin(ssid, pw);
@@ -164,7 +173,7 @@ String deviceID() {
   // Retorna ID padrão
  
     // ESP8266 utiliza função getChipId()
-    return "IeC-" + hexStr(ESP.getChipId());
+    return "ID interno - " + hexStr(ESP.getChipId()); 
  }
 
 String ipStr(const IPAddress &ip) {
@@ -185,11 +194,18 @@ void ledSet() {
 // Funções de Configuração ------------------------------
 void  configReset() {
   // Define configuração padrão
-  strlcpy(id, "IeC Device", sizeof(id)); 
-  strlcpy(ssid, "", sizeof(ssid)); 
-  strlcpy(pw, "", sizeof(pw)); 
-  ledOn     = false;
-  bootCount = 0;
+ strlcpy(login, "admin", sizeof(login));
+ strlcpy(senha, "admin", sizeof(senha));
+ strlcpy(id, "Dispositivo", sizeof(id));
+ strlcpy(ssid, "", sizeof(ssid)); 
+ strlcpy(pw, "", sizeof(pw)); 
+ strlcpy(masc, "", sizeof(masc)); 
+ strlcpy(gat, "", sizeof(gat)); 
+ bootCount = 0;
+ ledOn     = false;
+ strlcpy(idSensor,"sensor", sizeof(idSensor));
+ sensor    = 25;  
+  
 }
 
 boolean configRead() {
@@ -205,11 +221,17 @@ boolean configRead() {
     return false;
   } else {
     // Sucesso na leitura
-    strlcpy(id, jsonConfig["id"]      | "", sizeof(id)); 
-    strlcpy(ssid, jsonConfig["ssid"]  | "", sizeof(ssid)); 
-    strlcpy(pw, jsonConfig["pw"]      | "", sizeof(pw)); 
-    ledOn     = jsonConfig["led"]     | false;
-    bootCount = jsonConfig["boot"]    | 0;
+     strlcpy(login, jsonConfig["login"]        | "", sizeof(login));
+     strlcpy(senha,  jsonConfig["senha"]       | "", sizeof(senha));
+     strlcpy(id, jsonConfig["id"]              | "", sizeof(id)); 
+     strlcpy(ssid, jsonConfig["ssid"]          | "", sizeof(ssid)); 
+     strlcpy(pw, jsonConfig["pw"]              | "", sizeof(pw)); 
+     strlcpy(masc, jsonConfig["masc"]          | "", sizeof(masc));
+     strlcpy(gat,  jsonConfig["gat"]           | "", sizeof(gat));
+     bootCount = jsonConfig["boot"]            | 0;
+     ledOn     = jsonConfig["led"]             | false;
+     strlcpy(idSensor, jsonConfig["idSensor"]  | "", sizeof(idSensor));
+     sensor    = jsonConfig["sensor"]          | 25;
 
     file.close();
 
@@ -228,11 +250,18 @@ boolean configSave() {
   File file = SPIFFS.open(F("/Config.json"), "w+");
   if (file) {
     // Atribui valores ao JSON e grava
-    jsonConfig["id"]    = id;
-    jsonConfig["led"]   = ledOn;
-    jsonConfig["boot"]  = bootCount;
-    jsonConfig["ssid"]  = ssid;
-    jsonConfig["pw"]    = pw;
+    jsonConfig["login"]    = login;
+    jsonConfig["senha"]    = senha;
+    jsonConfig["id"]       = id;
+    jsonConfig["ssid"]     = ssid;
+    jsonConfig["pw"]       = pw;
+    jsonConfig["masc"]     = masc;
+    jsonConfig["gat"]      = gat;
+    jsonConfig["boot"]     = bootCount;
+    jsonConfig["led"]      = ledOn;
+    jsonConfig["idSensor"] = idSensor;
+    jsonConfig["sensor"]   = sensor;
+
 
     serializeJsonPretty(jsonConfig, file);
     file.close();
@@ -249,7 +278,7 @@ boolean configSave() {
 // Requisições Web --------------------------------------
 void handleHome() {
   // Home
-  File file = SPIFFS.open(F("/Home.htm"), "r");
+  File file = SPIFFS.open(F("/Home.html"), "r");
   if (file) {
     file.setTimeout(100);
     String s = file.readString();
@@ -257,19 +286,20 @@ void handleHome() {
 
     // Atualiza conteúdo dinâmico
     s.replace(F("#id#")       , id);
-    s.replace(F("#led#")      , ledOn ? F("Ligado") : F("Desligado"));
-    s.replace(F("#bootCount#"), String(bootCount));
-    #ifdef ESP8266
-      s.replace(F("#serial#") , hexStr(ESP.getChipId()));
-    #else
-      s.replace(F("#serial#") , hexStr(ESP.getEfuseMac()));
-    #endif
+    s.replace(F("#serial#")   , hexStr(ESP.getChipId()));
     s.replace(F("#software#") , softwareStr());
     s.replace(F("#sysIP#")    , ipStr(WiFi.status() == WL_CONNECTED ? WiFi.localIP() : WiFi.softAPIP()));
     s.replace(F("#clientIP#") , ipStr(server.client().remoteIP()));
+   /*****************************************************************/
+    s.replace(F("#masc#")     , ipStr(server.client().remoteIP()));
+    s.replace(F("#gat#")      , ipStr(server.client().remoteIP()));
+/*********************************************************************/
     s.replace(F("#active#")   , longTimeStr(millis() / 1000));
-    s.replace(F("#userAgent#"), server.header(F("User-Agent")));
-
+    s.replace(F("#bootCount#"), String(bootCount));
+    s.replace(F("#led#")      , ledOn ? F("Ligado") : F("Desligado"));
+    s.replace(F("#idSensor#") , idSensor);
+  //  s.replace(F("#temp#")      , sensor);
+      
     // Envia dados
     server.send(200, F("text/html"), s);
     log("Home - Cliente: " + ipStr(server.client().remoteIP()) +
@@ -289,10 +319,14 @@ void handleConfig() {
     file.close();
 
     // Atualiza conteúdo dinâmico
-    s.replace(F("#id#")     , id);
-    s.replace(F("#ledOn#")  ,  ledOn ? " checked" : "");
-    s.replace(F("#ledOff#") , !ledOn ? " checked" : "");
-    s.replace(F("#ssid#")   , ssid);
+    s.replace(F("#login#")     , login);
+    s.replace(F("#senha#")     , senha);
+    s.replace(F("#id#")        , id);
+    s.replace(F("#ssid#")      , ssid);
+    s.replace(F("#masc#")      , masc);
+    s.replace(F("#gat#")       , gat);
+    s.replace(F("#ledOn#")     ,  ledOn ? " checked" : "");
+    s.replace(F("#ledOff#")    , !ledOn ? " checked" : "");
     // Send data
     server.send(200, F("text/html"), s);
     log("Config - Cliente: " + ipStr(server.client().remoteIP()));
@@ -310,6 +344,16 @@ void handleConfigSave() {
   if (server.args() == 5) {
 
     String s;
+
+   // Grava login
+    s = server.arg("login");
+    s.trim();
+    strlcpy(login, s.c_str(), sizeof(login));
+
+       // Grava senha
+    s = server.arg("senha");
+    s.trim();
+    strlcpy(senha, s.c_str(), sizeof(senha));
 
     // Grava id
     s = server.arg("id");
@@ -331,6 +375,16 @@ void handleConfigSave() {
       // Atualiza senha, se informada
       strlcpy(pw, s.c_str(), sizeof(pw));
     }
+
+       // Grava masc
+    s = server.arg("masc");
+    s.trim();
+    strlcpy(masc, s.c_str(), sizeof(masc));
+
+       // Grava gat
+    s = server.arg("gat");
+    s.trim();
+    strlcpy(gat, s.c_str(), sizeof(gat));
 
     // Grava ledOn
     ledOn = server.arg("led").toInt();
