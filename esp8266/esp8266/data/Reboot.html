@@ -5,11 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Sensores</title>
+    <link href="css" rel="stylesheet">
+    <title>Reiniciar</title>
+
+<script>
+    var t = 15;
+
+function decT() {
+    t--;
+    document.getElementById("time").innerHTML = t;
+    if (t == 0) {
+      window.location = "/";
+    } else {
+      window.setTimeout("decT()", 1000);
+    }
+  }
+</script>
 </head>
 
-<body>
+<body onLoad="decT()">
   
     <div class="logo">
         <img src="logo.png" alt="logo" width="200px">
@@ -20,10 +34,11 @@
             <div class="container">
                 <h1>Bem-Vindo à Interface Web</h1>
                 <nav>
-                    <a href="Home.html">HOME</a>
-                    <a href="Config.html">CONFIGURAÇÃO</a>
+                    <a href="#">HOME</a>
+                    <a href="#">CONFIGURAÇÃO</a>
+                    <a href="#">RECONFIGURAR</a> 
                     <a href="#">SENSORES</a>
-                    <a href="Reboot.html"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
+                    <a href="#">REINICIAR</a>
                 </nav>
 
             </div>
@@ -33,11 +48,11 @@
             <div class="container-corpo">
                 <table>
                     <tr>
-                      <th colspan="2" class="msg">Sensores</th>
+                      <th colspan="2" class="msg">Reiniciar</th>
                     </tr>
                     <tr style="height: 150px;">
-                      <th style="width: 25%;">Temperaura Ambiente</th>
-                      <td> 25 °C</td>
+                      <th style="width: 25%;">Aguarde</th>
+                      <td><span id="time">20</span> segundos</td>
                     </tr>
                   </table>
             </div>

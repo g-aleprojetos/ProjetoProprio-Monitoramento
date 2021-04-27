@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link href="css" rel="stylesheet">
     <title>Configuração</title>
 </head>
 
@@ -20,10 +20,11 @@
             <div class="container">
                 <h1>Bem-Vindo à Interface Web</h1>
                 <nav>
-                    <a href="Home.html">HOME</a>
-                    <a href="#">CONFIGURAÇÃO</a>
-                    <a href="Sensor.html">SENSORES</a>
-                    <a href="Reboot.html"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
+                    <a href="/">HOME</a>
+                    <a href="config">CONFIGURAÇÃO</a>
+                    <a href="reconfig" onclick="return confirm('Reconfigurar módulo?')">RECONFIGURAR</a> 
+                    <a href="sensor">SENSORES</a>
+                    <a href="reboot"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
                 </nav>
 
             </div>
@@ -31,7 +32,7 @@
         </header>
         <div class="corpo">
             <div class="container-corpo">
-              <form name="config" action="configSave" method="POST">
+              <form name="config" action="configSave" method="post">
                 <table>
                     <tr>
                         <th  colspan="2" class="msg">CONFIGURAÇÃO</th>
