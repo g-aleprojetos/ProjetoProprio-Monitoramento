@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <title>Configuração</title>
 </head>
 
@@ -19,14 +20,6 @@
         <header>
             <div class="container">
                 <h1>Bem-Vindo à Interface Web</h1>
-                <nav>
-                    <a href="/">HOME</a>
-                    <a href="config">CONFIGURAÇÃO</a>
-                    <a href="reconfig" onclick="return confirm('Reconfigurar módulo?')">RECONFIGURAR</a> 
-                    <a href="sensor">SENSORES</a>
-                    <a href="reboot"  onclick="return confirm('Reiniciar módulo?')">REINICIAR</a>
-                </nav>
-
             </div>
 
         </header>
@@ -34,40 +27,30 @@
             <div class="container-corpo">
               <form name="config" action="configSave" method="post">
                 <table>
+                    
                     <tr>
-                        <th  colspan="2" class="msg">CONFIGURAÇÃO</th>
+                        <th  colspan="2" class="msg">CONFIGURAÇÃO INICIAL</th>
                     </tr>
+                    
                     <tr>
                         <th>LOGIN</th>
-                        <td> <input type="text" name="id" value="#login#" size="65" maxlength="29"></td>
+                        <td> <input type="text" name="id" value="#login#" size="68" maxlength="29"></td>
                       </tr>
+                     
                       <tr>
                         <th>SENHA</th>
-                        <td> <input type="text" name="id" value="#senha#" size="65" maxlength="29"></td>
+                        <td> <input type="text" name="id" value="#senha#" size="68" maxlength="29"></td>
                       </tr>
+                     
                       <tr>
-                        <th>NOME DO DISPOSITIVO</th>
-                        <td> <input type="text" name="id" value="#id#" size="65" maxlength="29"></td>
-                      </tr>
-                      <tr>
-                        <th rowspan="4">Wi-Fi</th>
+                        <th rowspan="2">Wi-Fi</th>
                         <td class="wifi">SSID: <input type="text" name="ssid" value="#ssid#" size="55" maxlength="29"></td>
                       </tr>
+                     
                       <tr>
                         <td class="wifi">Senha: <input type="password" name="pw" size="55" maxlength="29"></td>
                       </tr>
-                      <tr>
-                        <td class="wifi">Masc: <input type="mascara" name="masc" value="#masc#" size="55" maxlength="29"></td>
-                      </tr>
-                      <tr>
-                        <td class="wifi">GATEWAY: <input type="gateway" name="gat" value="#gat#" size="55" maxlength="29"></td>
-                      </tr>
-                      <th>LUZ DE STATUS</th>
-                        <td>
-                          <input type="radio" name="led" value="1"#ledOn#> Ligado &nbsp;&nbsp;
-                          <input type="radio" name="led" value="0"#ledOff#> Desligado
-                        </td>
-                      </tr>
+                                           
                       <tr>
                       <th colspan="2" class="msg">
                       <div class="bnt-conf">
@@ -76,7 +59,7 @@
                         </div>
                     </div>
                   </th>
-                </tr>
+                   </tr>
                 </table>
               </form>
             </div>
