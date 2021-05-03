@@ -67,7 +67,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);     // LED
  
   //--- WiFi Station ---
- Serial.println("Entrou no WiFi\n ");
+ Serial.println("Entrou no WiFi ");
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pw);
   Serial.println("Conectando WiFi ");
