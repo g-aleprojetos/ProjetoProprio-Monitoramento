@@ -1,0 +1,212 @@
+:root{
+  --color1: #000000;
+  --color2: #ffffff;
+  --color3: #99d3df;
+  --color4: rgb(201, 201, 201);
+  --color5: #4a8dac;
+  --color6: #f9f9f9;
+  --color7: #06568b;
+  --color8: #cdcdcd;
+ 
+ 
+ 
+}
+
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+
+}
+
+body{
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color6);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.logo{
+  font-family: Brush Script MT, Brush Script Std, cursive;
+  font-size: 40px;
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.principal{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: var(--color1); 
+  background: var(--color5);
+  border-radius: 7px 7px 7px 7px;
+  min-width: 700px;
+  max-width:fit-content;
+}
+
+header .container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 7px 7px 0px 0px;  
+  padding: 7px 4px 0px 4px;
+  margin: 0px;
+}
+
+header nav{
+  margin-top: 10px;
+}
+
+header nav a{
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--color1);
+  margin-right: 25px;
+  margin-left: 25px;
+}
+
+header nav a:hover{
+  color: var(--color2);
+}
+
+.corpo {
+  background-color: var(--color2);
+  margin: 10px;
+  padding: 0px;
+}
+
+.msg {
+  font-size: 14px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+table{
+  width:  100%;
+}
+
+tbody{
+  display:block;
+  width: 700px;
+  margin:0px;
+  padding: 0px;;
+}
+
+th{
+  font-size: 11px;
+  background: var(--color3);
+  text-align: right;
+  padding: 5px;
+  border-radius: 3px 0px 0px 3px;
+  width: 25%;
+ }
+
+td{
+  font-size: 11px;
+  background: var(--color4);
+  padding: 5px;
+  border-radius: 0px 3px 3px 0px;
+  
+ }
+
+.btn{
+  display: flex;
+  justify-content:center;
+  margin-top: 5px;
+  padding: 5px; 
+
+}
+
+.bnt-estilo{
+  background-color: var(--color8);
+  color: var(--color1);
+  padding: 10px 50px 10px 50px; 
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/** LOGIN ***/
+
+
+.corpo-login{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.container-login{
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: var(--color2); 
+  background: var(--color5);
+  border-radius: 7px 7px 7px 7px;
+  min-width: 400px;
+  max-width:fit-content;
+  padding: 15px;
+}
+
+.logar-senha{
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.form-control{
+  margin: 5px;
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 7px;
+  border-color: var(--color5);
+  background-color: var(--color8);
+
+}
+
+/******** Configuração **********/
+
+.bnt-conf{
+display: flex;
+flex-direction: column;
+
+}
+
+.wifi{
+ 
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+
+.bnt-estilo-ok{
+  background-color: var(--color8);
+  color: var(--color1);
+  padding: 10px 50px 10px 50px; 
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.bnt-estilo-voltar{
+  background-color: var(--color8);
+  color: var(--color1);
+  padding: 10px 50px 10px 50px; 
+  border-radius: 4px;
+  font-size: 14px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
