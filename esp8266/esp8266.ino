@@ -86,6 +86,14 @@ void setup(){
     
     // WiFi Station conectado
     Serial.println("WiFi conectado");
+ 
+  Serial.println(WiFi.localIP());
+  server.on(F("/configInit")    , handleConfigInit);
+  server.on(F("/configSave"), handleConfigSave);
+  server.on(F("/css")       , handleCSS);
+  server.onNotFound(handleHomeInit);
+  server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
+  Serial.println("Entrou em configurar server\n ");
 
   } else {
     
@@ -103,8 +111,9 @@ void setup(){
   server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
   Serial.println("Entrou em configurar server\n ");
 
-  server.begin();
-  }
+   }
+
+   server.begin();
 }
  
 void loop(){
@@ -153,14 +162,8 @@ String hexStr(const unsigned long &h, const byte &l = 8) {
 }
 
 String deviceID() {
-  // Retorna ID padrão
-  #ifdef ESP8266
-    // ESP8266 utiliza função getChipId()
+
     return "IeC-" + hexStr(ESP.getChipId());
-  #else
-    // ESP32 utiliza função getEfuseMac()
-    return "IeC-" + hexStr(ESP.getEfuseMac());
-  #endif
 }
 
 String ipStr(const IPAddress &ip) {
@@ -225,7 +228,7 @@ boolean configRead() {
   File file = SPIFFS.open(F("/ConfigInit.json"), "r");
   if (deserializeJson(jsonConfigInit, file)) {
     // Falha na leitura, assume valores padrão
-    configReset();
+    configReset();//linha 247
 
     log(F("Falha lendo ConfigInit, assumindo valores padrão."));
 
@@ -252,8 +255,8 @@ boolean configRead() {
 
 void  configReset() {
   // Define configuração padrão
- strlcpy(login, "admin", sizeof(login));
- strlcpy(senha, "admin", sizeof(senha));
+ strlcpy(login, "", sizeof(login));
+ strlcpy(senha, "", sizeof(senha));
  strlcpy(ssid, "", sizeof(ssid)); 
  strlcpy(pw, "", sizeof(pw)); 
   
@@ -294,7 +297,6 @@ void handleHomeInit() {
 
     // Atualiza conteúdo dinâmico
     s.replace(F("#login#")     , login);
-    s.replace(F("#senha#")     , senha);
     s.replace(F("#ssid#")      , ssid);
       
     // Envia dados
@@ -317,7 +319,6 @@ void handleConfigInit() {
 
     // Atualiza conteúdo dinâmico
     s.replace(F("#login#")     , login);
-    s.replace(F("#senha#")     , senha);
     s.replace(F("#ssid#")      , ssid);
 
     // Send data
@@ -340,18 +341,24 @@ void handleConfigSave() {
     // Grava login
     s = server.arg("login");
     s.trim();
+    if( s != ""){
     strlcpy(login, s.c_str(), sizeof(login));
-
+    }
+    
     // Grava senha
     s = server.arg("senha");
     s.trim();
+    if(s != ""){
     strlcpy(senha, s.c_str(), sizeof(senha));
-
+    }
+    
     // Grava ssid
     s = server.arg("ssid");
     s.trim();
+    if( s != ""){
     strlcpy(ssid, s.c_str(), sizeof(ssid));
-
+    }
+    
     // Grava pw
     s = server.arg("pw");
     s.trim();
@@ -364,12 +371,14 @@ void handleConfigSave() {
     if (configSave()) {
       server.send(200, F("text/html"), F("<html><meta charset='UTF-8'><script>alert('Configuração salva.');history.back()</script></html>"));
       log("ConfigSave - Cliente: " + ipStr(server.client().remoteIP()));
+      ESP.reset();
     } else {
       server.send(200, F("text/html"), F("<html><meta charset='UTF-8'><script>alert('Falha salvando configuração.');history.back()</script></html>"));
       log(F("ConfigSave - ERRO salvando Config"));
     }
   } else {
     server.send(200, F("text/html"), F("<html><meta charset='UTF-8'><script>alert('Erro de parâmetros.');history.back()</script></html>"));
+   
   }
 }
 
