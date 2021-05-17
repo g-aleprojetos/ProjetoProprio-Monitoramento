@@ -96,14 +96,14 @@ table{
 }
 
 tbody{
-  display:block;
-  width: 700px;
+  display:contents;
+  width:auto;
   margin:0px;
   padding: 0px;;
 }
 
 th{
-  font-size: 11px;
+  font-size: 15px;
   background: var(--color3);
   text-align: right;
   padding: 5px;
@@ -111,10 +111,11 @@ th{
   width: 25%;
  }
 
+
 td{
-  font-size: 11px;
+  margin: auto;
   background: var(--color4);
-  padding: 5px;
+  padding: 3px;
   border-radius: 0px 3px 3px 0px;
   
  }
@@ -181,7 +182,7 @@ flex-direction: column;
 }
 
 .wifi{
- 
+  font-size: 15px;
   display:flex;
   flex-direction: row;
   align-items: center;

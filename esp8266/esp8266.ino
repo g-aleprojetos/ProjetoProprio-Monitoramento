@@ -34,7 +34,7 @@ IPAddress         apIP(192, 168, 4, 1);
 void formatFS();
 void deleteFile();
 void openFS();
-void createFile();
+void createFileConfInit();
 boolean configRead();
 void  configReset();
 void readFile();
@@ -52,7 +52,6 @@ String buf;
 void setup(){
   //Configura a porta serial para 115200bps
   Serial.begin(9600);
-  Serial.println("Serial configurado");
 
    //Abre o sistema de arquivos (mount)
   openFS();
@@ -61,7 +60,7 @@ void setup(){
   //deleteFile();
  
   //Cria o arquivo caso o mesmo não exista
-  createFile();
+  createFileConfInit();
   //lê o arquivo de configuração
   configRead();
 
@@ -88,10 +87,11 @@ void setup(){
     Serial.println("WiFi conectado");
  
   Serial.println(WiFi.localIP());
+  server.on(F("/login")    , handleLogin);
   server.on(F("/configInit")    , handleConfigInit);
   server.on(F("/configSave"), handleConfigSave);
   server.on(F("/css")       , handleCSS);
-  server.onNotFound(handleHomeInit);
+  server.onNotFound(handleLogin);
   server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
   Serial.println("Entrou em configurar server\n ");
 
@@ -107,7 +107,7 @@ void setup(){
   server.on(F("/configInit")    , handleConfigInit);
   server.on(F("/configSave"), handleConfigSave);
   server.on(F("/css")       , handleCSS);
-  server.onNotFound(handleHomeInit);
+  server.onNotFound(handleConfigInit);
   server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
   Serial.println("Entrou em configurar server\n ");
 
@@ -202,23 +202,34 @@ void openFS(){
 }
 
 void createFile(){
+ 
+ char *arquivo[] = {"/ConfigInit.json", "/ConfigGeral.json"};
+ 
+  for(int i = 0; i < 2; i++){  
   File wFile;
  
   //Cria o arquivo se ele não existir
-    if(SPIFFS.exists("/ConfigInit.json")){
-    Serial.println("Arquivo ja existe!");
+    if(SPIFFS.exists(arquivo[i])){
+    Serial.print("Arquivo \"");
+    Serial.print(arquivo[i]);
+    Serial.println("\" ja existe!");
     } else {
     Serial.println("Criando o arquivo...");
-    wFile = SPIFFS.open("/ConfigInit.json","w+");
+    wFile = SPIFFS.open(arquivo[i],"w+");
  
     //Verifica a criação do arquivo
     if(!wFile){
-      Serial.println("Erro ao criar arquivo!");
+      Serial.print("Erro ao criar o arquivo ");
+      Serial.print(arquivo[i]);
+      Serial.println("!");
     } else {
-      Serial.println("Arquivo criado com sucesso!");
+      Serial.print("Arquivo ");
+      Serial.print(arquivo[i]);
+      Serial.println(" criado com sucesso!");
     }
   }
   wFile.close();
+  }
 }
 
 boolean configRead() {
@@ -236,10 +247,7 @@ boolean configRead() {
     configSave();   
     return false;
   } else {
-    // Sucesso na leitura
-    // Sucesso na leitura
-     strlcpy(login, jsonConfigInit["login"]        | "", sizeof(login));
-     strlcpy(senha,  jsonConfigInit["senha"]       | "", sizeof(senha));
+      // Sucesso na leitura
      strlcpy(ssid, jsonConfigInit["ssid"]          | "", sizeof(ssid)); 
      strlcpy(pw, jsonConfigInit["pw"]              | "", sizeof(pw)); 
 
@@ -255,8 +263,6 @@ boolean configRead() {
 
 void  configReset() {
   // Define configuração padrão
- strlcpy(login, "", sizeof(login));
- strlcpy(senha, "", sizeof(senha));
  strlcpy(ssid, "", sizeof(ssid)); 
  strlcpy(pw, "", sizeof(pw)); 
   
@@ -269,8 +275,6 @@ boolean configSave() {
   File file = SPIFFS.open(F("/ConfigInit.json"), "w+");
   if (file) {
     // Atribui valores ao JSON e grava
-    jsonConfigInit["login"]    = login;
-    jsonConfigInit["senha"]    = senha;
     jsonConfigInit["ssid"]     = ssid;
     jsonConfigInit["pw"]       = pw;
   
@@ -287,27 +291,6 @@ boolean configSave() {
 }
 
 // Requisições Web --------------------------------------
-void handleHomeInit() {
-  // Home
-  File file = SPIFFS.open(F("/ConfigInit.html"), "r");
-  if (file) {
-    file.setTimeout(100);
-    String s = file.readString();
-    file.close();
-
-    // Atualiza conteúdo dinâmico
-    s.replace(F("#login#")     , login);
-    s.replace(F("#ssid#")      , ssid);
-      
-    // Envia dados
-    server.send(200, F("text/html"), s);
-    log("Config Init - Cliente: " + ipStr(server.client().remoteIP()) +
-        (server.uri() != "/" ? " [" + server.uri() + "]" : ""));
-  } else {
-    server.send(500, F("text/plain"), F("Home - ERROR 500"));
-    log(F("Config Init - ERRO lendo arquivo"));
-  }
-}
 
 void handleConfigInit() {
   // Config
@@ -318,7 +301,6 @@ void handleConfigInit() {
     file.close();
 
     // Atualiza conteúdo dinâmico
-    s.replace(F("#login#")     , login);
     s.replace(F("#ssid#")      , ssid);
 
     // Send data
@@ -334,24 +316,10 @@ void handleConfigSave() {
   // Grava Config
   // Verifica número de campos recebidos
   // Gera o campo adicional "plain" via post
-  if (server.args() == 5) {
+  if (server.args() == 3) {
 
     String s;
-
-    // Grava login
-    s = server.arg("login");
-    s.trim();
-    if( s != ""){
-    strlcpy(login, s.c_str(), sizeof(login));
-    }
-    
-    // Grava senha
-    s = server.arg("senha");
-    s.trim();
-    if(s != ""){
-    strlcpy(senha, s.c_str(), sizeof(senha));
-    }
-    
+  
     // Grava ssid
     s = server.arg("ssid");
     s.trim();
@@ -381,6 +349,30 @@ void handleConfigSave() {
    
   }
 }
+
+void handleLogin() {
+  // Login
+  File file = SPIFFS.open(F("/Login.html"), "r");
+  if (file) {
+    file.setTimeout(100);
+    String s = file.readString();
+    file.close();
+
+    // Envia dados
+    server.send(200, F("text/html"), s);
+    log("Login - Cliente: " + ipStr(server.client().remoteIP()) +
+        (server.uri() != "/" ? " [" + server.uri() + "]" : ""));
+  } else {
+    server.send(500, F("text/plain"), F("Login - ERROR 500"));
+    log(F("Login - ERRO lendo arquivo"));
+  }
+}
+
+
+
+
+
+
 
 void handleCSS() {
   // Arquivo CSS
