@@ -120,6 +120,11 @@ td{
   
  }
 
+ .conectar{
+  
+  padding-left: 40px;
+ }
+
 .btn{
   display: flex;
   justify-content:center;
