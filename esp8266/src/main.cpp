@@ -38,19 +38,22 @@ void deleteFile();
 void openFS();
 void createFileConfInit();
 boolean configRead();
-boolean configRead();
-void  configReset();
-void readFile();
+boolean configReadLogin();
 boolean configSave();
+boolean configSaveLogin();
 String deviceID();
 
 void handleConfigInit();
 void handleConfigSave();
+void handleLogin();
+void handconfLoginSenha();
+void handleHome();
 void handleCSS(); 
 
-void telaConfigInit();
-void telaLogin();
 void telaAccessPoint();
+void telaCadastroLogin();
+void telaLogin();
+
 
 //--- Variáveis Globais ---
 char              login[30];    // login
@@ -58,7 +61,8 @@ char              senha[30];    // senha
 char                 id[30];    // Identificação do dispositivo
 char               ssid[30];    // Rede WiFi
 char                 pw[30];    // Senha da Rede WiFi
-boolean            conectar;    // Status se conecta na internet 
+boolean         statusLogin;    // Status do usuario decorrente ao login do dispositivo
+
 
 
 void setup(){
@@ -75,10 +79,11 @@ void setup(){
  
   configRead();                   //lê o arquivo de configuração
 
+  configReadLogin();              //lê o arquivo de configuração login
+
   pinMode(LED_PIN, OUTPUT);       // LED
   digitalWrite(LED_PIN, HIGH);    //Inicia com o led apagado
 
-if(conectar == true){
 
  //--- WiFi Station ---
   WiFi.mode(WIFI_STA);
@@ -98,38 +103,16 @@ if(conectar == true){
     // WiFi Station conectado
     Serial.println("WiFi conectado");
  
-     Serial.println(WiFi.localIP());
+    Serial.println(WiFi.localIP());
 
-  server.on(F("/configInit"), handleConfigInit);
-  server.on(F("/configSave"), handleConfigSave);
-  server.on(F("/css")       , handleCSS);
-  server.onNotFound(handleConfigInit);
-  server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
-  Serial.println("Entrou em configurar server\n ");
-
-  } else {
+       telaLogin();  //entra na tela de login 
     
-  WiFi.mode(WIFI_AP);
-  WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-  WiFi.softAP( apWifi );
 
-     //--- Habilita roteamento DNS ---
-  dnsServer.start(DNSSERVER_PORT , "*", apIP);
-  dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
-  server.on(F("/configInit")    , handleConfigInit);
-  server.on(F("/configSave"), handleConfigSave);
-  server.on(F("/css")       , handleCSS);
-  server.onNotFound(handleConfigInit);
-  server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
-  Serial.println("Entrou em configurar server\n ");
+    } else {
+    
+       telaAccessPoint();//access point
 
    }
-}else{
-Serial.println("Entrou em NÃO CONFIGURAR WIFI\n ");
-}
-
- 
-
 
    server.begin();
 }//end setup
@@ -203,9 +186,10 @@ void formatFS(){
 
 void deleteFile(void) {
   //Remove o arquivo
-  char* arquivo[] = {"/ConfigInit.json", "/ConfigGeral.json"};
+  char* arquivo[] = {"/ConfigInit.json", "/ConfigGeral.json", "/ConfLogin.jon"};
  
- for(int i = 0; i < 2; i++){
+ Serial.println();
+ for(int i = 0; i < 3; i++){
      if(LittleFS.remove(arquivo[i])){
         Serial.print("O arquivo ");
         Serial.print(arquivo[i]);
@@ -221,19 +205,20 @@ void deleteFile(void) {
 void openFS(){
   //Abre o sistema de arquivos
   if(!LittleFS.begin ()){
-    Serial.println("Erro ao abrir o sistema de arquivos");
+    Serial.println("\nErro ao abrir o sistema de arquivos");
   } else {
-    Serial.println("Sistema de arquivos aberto com sucesso!");
+    Serial.println("\nSistema de arquivos aberto com sucesso!");
   }
 }
 
 void createFileConfInit(){
  
- char* arquivo[] = {"/ConfigInit.json", "/ConfigGeral.json"};
+ char* arquivo[] = {"/ConfigInit.json", "/ConfigGeral.json", "/ConfLogin.jon"};
  
-  for(int i = 0; i < 2; i++){  
+  for(int i = 0; i < 3; i++){  
   File wFile;
  
+    Serial.println();
   //Cria o arquivo se ele não existir
     if(LittleFS.exists(arquivo[i])){
     Serial.print("Arquivo \"");
@@ -266,9 +251,14 @@ boolean configRead() {
   if (deserializeJson(jsonConfigInit, file)) {
     
     // Falha na leitura, assume valores padrão
-    log(F("Falha lendo ConfigInit, assumindo valores padrão."));
+    log(F("\nFalha lendo ConfigInit, assumindo valores padrão."));
 
-    configReset();
+    // Define configuração padrão
+    statusLogin     = false;
+    strlcpy(login, "", sizeof(login)); 
+    strlcpy(senha, "", sizeof(senha)); 
+    strlcpy(ssid, "", sizeof(ssid)); 
+    strlcpy(pw, "", sizeof(pw)); 
 
     // Salva configuração
     configSave();
@@ -276,7 +266,9 @@ boolean configRead() {
     return false;
   } else {
       // Sucesso na leitura
-     conectar = jsonConfigInit["conectar"]            | true;
+     statusLogin = jsonConfigInit["statusLogin"]      | true;
+     strlcpy(login, jsonConfigInit["login"]           | "", sizeof(login)); 
+     strlcpy(senha, jsonConfigInit["senha"]           | "", sizeof(senha)); 
      strlcpy(ssid, jsonConfigInit["ssid"]             | "", sizeof(ssid)); 
      strlcpy(pw, jsonConfigInit["pw"]                 | "", sizeof(pw)); 
 
@@ -290,12 +282,37 @@ boolean configRead() {
   }
 }
 
-void  configReset() {
-  // Define configuração padrão
- conectar     = true;
- strlcpy(ssid, "", sizeof(ssid)); 
- strlcpy(pw, "", sizeof(pw)); 
+boolean configReadLogin() {
+  // Lê configuração
+  StaticJsonDocument<256> jsonConfigLogin;
+
+  File file = LittleFS.open(F("/ConfLogin.jon"), "r");
+  if (deserializeJson(jsonConfigLogin, file)) {
+    
+    // Falha na leitura, assume valores padrão
+    log(F("\nFalha lendo ConfigLogin, assumindo valores padrão."));
+
+    // Define configuração padrão
+    strlcpy(login, "", sizeof(login)); 
+    strlcpy(senha, "", sizeof(senha)); 
   
+    // Salva configuração
+    configSaveLogin();
+
+    return false;
+  } else {
+      // Sucesso na leitura
+     strlcpy(login, jsonConfigLogin["login"]            | "", sizeof(login)); 
+     strlcpy(senha, jsonConfigLogin["senha"]            | "", sizeof(senha)); 
+   
+    file.close();
+
+    Serial.println("\nLendo configLogin:");
+    serializeJsonPretty(jsonConfigLogin, Serial);
+    Serial.println("");
+
+    return true;
+  }
 }
 
 boolean configSave() {
@@ -305,15 +322,43 @@ boolean configSave() {
   File file = LittleFS.open(F("/ConfigInit.json"), "w+");
   if (file) {
     // Atribui valores ao JSON e grava
-    jsonConfigInit["conectar"] = conectar;
+    jsonConfigInit["statusLogin"] = statusLogin;
+    jsonConfigInit["login"]     = login;
+    jsonConfigInit["senha"]     = senha;
     jsonConfigInit["ssid"]     = ssid;
     jsonConfigInit["pw"]       = pw;
   
     serializeJsonPretty(jsonConfigInit, file);
     file.close();
 
-    log(F("\nGravando config:"));
+    log(F("\nGravando configInit:"));
     serializeJsonPretty(jsonConfigInit, Serial);
+    log("");
+   
+    configSaveLogin();
+
+    return true;
+  }
+  configSaveLogin();
+
+  return false;
+}
+
+boolean configSaveLogin() {
+  // Grava configuração
+   StaticJsonDocument<256> jsonConfigLogin;
+
+  File file = LittleFS.open(F("/ConfLogin.jon"), "w+");
+  if (file) {
+    // Atribui valores ao JSON e grava
+    jsonConfigLogin["login"]     = login;
+    jsonConfigLogin["senha"]     = senha;
+   
+    serializeJsonPretty(jsonConfigLogin, file);
+    file.close();
+
+    log(F("\nGravando configLogin:"));
+    serializeJsonPretty(jsonConfigLogin, Serial);
     log("");
 
     return true;
@@ -333,8 +378,8 @@ void handleConfigInit() {
 
     // Atualiza conteúdo dinâmico
     s.replace(F("#ssid#")      , ssid);
-    s.replace(F("#conectarOn#")  ,  conectar ? " checked" : "");
-    s.replace(F("#conectarOff#") , !conectar ? " checked" : "");
+    s.replace(F("#login#")      , login);
+
     // Send data
     server.send(200, F("text/html"), s);
     log("Config - Cliente: " + ipStr(server.client().remoteIP()));
@@ -348,16 +393,26 @@ void handleConfigSave() {
   // Grava Config
   // Verifica número de campos recebidos
   // Gera o campo adicional "plain" via post
-  if (server.args() == 4) {
+  if (server.args() == 5) {
 
     String s;
   
-      // Grava conectar
-    conectar = server.arg("conectar").toInt();
-    Serial.print("conectar= ");
-    Serial.println(conectar);
+      // Grava login
+    s = server.arg("login");
+    s.trim();
+    if( s != ""){
+    strlcpy(login, s.c_str(), sizeof(login));
+    }
+    
+    // Grava senha
+    s = server.arg("senha");
+    s.trim();
+    if (s != "") {
+      // Atualiza senha, se informada
+      strlcpy(senha, s.c_str(), sizeof(senha));
+    }
 
-    // Grava ssid
+     // Grava ssid
     s = server.arg("ssid");
     s.trim();
     if( s != ""){
@@ -387,6 +442,69 @@ void handleConfigSave() {
   }
 }
 
+void handleLogin() {
+  // Login
+  File file = LittleFS.open(F("/Login.html"), "r");
+  if (file) {
+    file.setTimeout(100);
+    String s = file.readString();
+    file.close();
+
+    // Envia dados
+    server.send(200, F("text/html"), s);
+    log("Login - Cliente: " + ipStr(server.client().remoteIP()) +
+        (server.uri() != "/" ? " [" + server.uri() + "]" : ""));
+  } else {
+    server.send(500, F("text/plain"), F("Login - ERROR 500"));
+    log(F("Login - ERRO lendo arquivo"));
+  }
+}
+
+void handconfLoginSenha(){
+
+    String s;
+    char auxLogin[30];
+    char auxSenha[30];
+
+ if (server.args() == 3) {
+
+    // Recebe Login da tela de login
+    s = server.arg("login");
+    s.trim();
+    strlcpy(auxLogin, s.c_str(), sizeof(auxLogin));
+
+    // Recebe Senha da tela de login
+    s = server.arg("senha");
+    s.trim();
+    strlcpy(auxSenha, s.c_str(), sizeof(auxSenha));
+  
+ }
+
+    Serial.print("Recebeu login: ");
+    Serial.println(auxLogin);
+    Serial.print("Recebeu senha: ");
+    Serial.println(auxSenha);
+}
+
+void handleHome() {
+  // Home
+  File file = LittleFS.open(F("/Home.html"), "r");
+  if (file) {
+    file.setTimeout(100);
+    String s = file.readString();
+    file.close();
+
+    // Envia dados
+    server.send(200, F("text/html"), s);
+    log("Login - Cliente: " + ipStr(server.client().remoteIP()) +
+        (server.uri() != "/" ? " [" + server.uri() + "]" : ""));
+  } else {
+    server.send(500, F("text/plain"), F("Login - ERROR 500"));
+    log(F("Login - ERRO lendo arquivo"));
+  }
+
+}
+
 void handleCSS() {
   // Arquivo CSS
   File file =LittleFS.open(F("/Style.css"), "r");
@@ -402,21 +520,34 @@ void handleCSS() {
   }
 }
 
-
-
-
-void telaConfigInit(){
-  Serial.println("entrando conecção ");
-}
-
 void telaAccessPoint(){
- 
+  
+  WiFi.mode(WIFI_AP);
+  WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
+  WiFi.softAP( apWifi );
+
+     //--- Habilita roteamento DNS ---
+  dnsServer.start(DNSSERVER_PORT , "*", apIP);
+  dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
+  server.on(F("/configInit")    , handleConfigInit);
+  server.on(F("/configInitSave"), handleConfigSave);
+  server.on(F("/css")       , handleCSS);
+  server.onNotFound(handleConfigInit);
+  server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
+  Serial.println("Entrou em configurar server\n ");
 
 }
-
 
 void telaLogin(){
-  Serial.println("Conectando Pagina home");
+  
+  server.on(F("/login")    , handleLogin);
+  server.on(F("/confLoginSenha") , handconfLoginSenha);
+  server.on(F("/home")     , handleHome);  
+  server.on(F("/css")      , handleCSS);
+  server.onNotFound(handleLogin);
+  server.collectHeaders(WEBSERVER_HEADER_KEYS, 1);
+  Serial.println("Conectado no WIFI\n ");
+
 }
 
 

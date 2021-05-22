@@ -11,10 +11,10 @@
 </head>
 
 <body>
-
-   
+      
     <main class="corpo-login">
-   
+        <form name="login" action="confLoginSenha" method="post">
+
         <div class="logo">
             <h1>g.aleprojetos</h1>
         </div>
@@ -23,23 +23,24 @@
            
             <div class="logar-senha">
                 <label>Login</label>
-                <input id="login" type="text" class="form-control">
+                <input type="text" name="login"  class="form-control">               
             </div>
 
             <div class="logar-senha">
                 <label>Senha</label>
-                <input id="senha" type="password" class="form-control">
+                <input type="password" id="senha" class="form-control">
             </div>
           
             <div class="btn">
               
-                <button id = "btnEntrar" type="button" class="bnt-estilo">OK</button>
+                <button id = "btnEntrar" type="submit" class="bnt-estilo">OK</button>
 
+                
             </div>
         </div>
-    </main>
-    <script src="/script.js"></script>
-   
+         </form> 
+     </main>
+    
 </body>
 
 </html>
