@@ -466,19 +466,20 @@ void handconfLoginSenha(){
     char auxLogin[30];
     char auxSenha[30];
 
- if (server.args() == 3) {
+ if (server.args() == 2) {
 
     // Recebe Login da tela de login
     s = server.arg("login");
     s.trim();
     strlcpy(auxLogin, s.c_str(), sizeof(auxLogin));
 
-    // Recebe Senha da tela de login
+        // Recebe Senha da tela de login
     s = server.arg("senha");
     s.trim();
     strlcpy(auxSenha, s.c_str(), sizeof(auxSenha));
-  
+   
  }
+
 
     Serial.print("Recebeu login: ");
     Serial.println(auxLogin);
