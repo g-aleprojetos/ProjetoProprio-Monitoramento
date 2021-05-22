@@ -1,4 +1,4 @@
-package com.g.aleprojetos.APIremoto;
+package com.g.aleprojetos.apiremoto;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
