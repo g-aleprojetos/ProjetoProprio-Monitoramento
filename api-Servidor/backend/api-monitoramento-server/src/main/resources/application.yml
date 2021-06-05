@@ -1,4 +1,6 @@
+
 server:
   port: 8080
-  sevlet:
-    context-path: /api-monitoramento
+  servlet:
+    context-path: /serverApiMonitoramento
+
