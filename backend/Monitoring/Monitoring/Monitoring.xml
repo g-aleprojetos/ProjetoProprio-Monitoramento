@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Monitoring</name>
+    </assembly>
+    <members>
+        <member name="M:Monitoring.Controllers.DeviceController.Post(Monitoring.Models.Device.DeviceViewModeInput)">
+            <summary>
+            this service allows registering a course for the user to authenticate
+            </summary>
+            <returns>Returns 201 status and user course data.</returns>
+        </member>
+        <member name="M:Monitoring.Controllers.DeviceController.Get">
+            <summary>
+            This service allows you to get all active courses from the user
+            </summary>
+            <returns>Returns status ok and user course data.</returns>
+        </member>
+        <member name="M:Monitoring.Controllers.UserController.LogInto(Monitoring.Models.Users.LoginViewModelInput)">
+            <summary>
+            This service allows you to authenticate a registered and active user
+            </summary>
+            <param name="loginViewModelInput"></param>
+            <returns>Return status ok, user data and token on success</returns>
+        </member>
+        <member name="M:Monitoring.Controllers.UserController.Register(Monitoring.Models.Users.LoginViewModelInput)">
+            <summary>
+            This service allows you to register a non-existing user
+            </summary>
+            <param name="loginViewModelInput">Login record view model</param>
+        </member>
+    </members>
+</doc>
