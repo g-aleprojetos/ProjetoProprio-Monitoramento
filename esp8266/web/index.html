@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="css/base/normalize.css">
+    <link rel="stylesheet" href="css/base/reset.css">
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <title>Home</title>
 </head>
-<body>
-    
+
+<body class="app">
+    <header class="cabecalho">Cabeçalho</header>
+
+    <main class="conteudo">
+        <section class="menu-principal">
+            <nav class="menu">
+                <ul class="menu-lista">
+                    <h3>Leitura da saida ESP8266</h3>
+                    <li class="menu-item">
+                        <a class="menu-link ativo" href="#"><i class="fas fa-home"></i>Home</a>
+                        <a class="menu-link" href="#"><i class="fas fa-mobile-alt"></i>Configuração</a>
+                        <a class="menu-link" href="#"><i class="fas fa-gamepad"></i>Reconfigurar</a>
+                        <a class="menu-link" href="#"><i class="fas fa-gamepad"></i>Reiniciar</a>
+                    </li>
+                </ul>
+            </nav>
+        </section>
+
+        <section class="mensagem">
+            <h3 class="corpo-info">Bem-vindo à Interface Web</h3>
+        </section>
+
+        <section class="corpo-dados">
+            <div class="menu-dados">
+                <div class="item" id="Identificacao">Identificação</div>
+                <div class="dado-item" id="dado-identificacao">#id#</div>
+
+                <div class="item" id="led">LED</div>
+                <div class="dado-item" id="dado-led">#led#</div>
+
+                <div class="item" id="inicializacoes">Inicializações</div>
+                <div class="dado-item" id="dado-inicializacoes">#bootCount#</div>
+
+                <div class="item" id="serial">Nr. Serial</div>
+                <div class="dado-item" id="dado-serial">#serial#</div>
+
+                <div class="item" id="software">Software</div>
+                <div class="dado-item" id="dado-software">#software#</div>
+
+                <div class="item" id="ipInterno">IP Interno</div>
+                <div class="dado-item" id="dado-ipInterno">#sysIP#</div>
+
+                <div class="item" id="ipCliente">IP Cliente</div>
+                <div class="dado-item" id="dado-ipCliente">#clientIP#</div>
+
+                <div class="item" id="tempoAtivo">Tempo Ativo</div>
+                <div class="dado-item" id="dado-tempoAtivo">#active#</div>
+
+                <div class="item" id="navegador">Navegador</div>
+                <div class="dado-item" id="dado-navegador">#userAgent#</div>
+
+            </div>
+        </section>
+
+    </main>
+    <footer class="rodape">rodape</footer>
+
 </body>
+
 </html>

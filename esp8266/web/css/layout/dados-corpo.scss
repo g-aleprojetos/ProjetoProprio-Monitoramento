@@ -1,0 +1,113 @@
+.item {
+}
+
+.dado-item {
+}
+
+#Identificacao {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+}
+
+#led {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 2 / 2;
+}
+
+#inicializacoes {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 3 / 3;
+}
+
+#serial {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 4 / 4;
+}
+
+#software {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 5 / 5;
+}
+
+#ipInterno {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 6 / 6;
+}
+
+#ipCliente {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 7 / 7;
+}
+
+#tempoAtivo {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 8 / 8;
+}
+
+#navegador {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 9 / 9;
+}
+
+#dado-Identificacao {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 1 / 1;
+}
+
+#dado-led {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 2 / 2;
+}
+
+#dado-inicializacoes {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 3 / 3;
+}
+
+#dado-serial {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 4 / 4;
+}
+
+#dado-software {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 5 / 5;
+}
+
+#dado-ipInterno {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 6 / 6;
+}
+
+#dado-ipCliente {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 7 / 7;
+}
+
+#dado-tempoAtivo {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 8 / 8;
+}
+
+#dado-navegador {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 9 / 9;
+}

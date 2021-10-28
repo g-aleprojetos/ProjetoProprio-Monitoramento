@@ -1,0 +1,151 @@
+.app {
+  background: #f1f1f1;
+  display: grid;
+  font-family: Arial, Helvetica, sans-serif;
+  grid-template-areas: "cabecalho" "conteudo" "rodape";
+  grid-column: auto;
+  grid-template-rows: 100px auto auto; }
+
+.conteudo {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-rows: 11% 7% 60% 10%;
+  height: calc(90vh - 100px); }
+
+.menu-principal {
+  grid-column: 2/ 4;
+  grid-row: 1 / 1; }
+
+.menu {
+  text-align: center;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  background: #dfdfdf;
+  border-style: solid;
+  border-radius: 30px 30px 0 0; }
+  .menu h3 {
+    margin-bottom: 0.4rem; }
+
+.menu-link {
+  color: #333333;
+  padding: 0.5rem 1rem; }
+
+.menu-link:hover,
+.menu-link.ativo {
+  border-bottom: 2px solid #0073e6; }
+
+.mensagem {
+  grid-column: 2 / 4;
+  grid-row: 2 / 2; }
+
+.corpo-info {
+  text-align: center;
+  border-style: solid;
+  margin: 0;
+  padding: 0.5rem; }
+
+.corpo-dados {
+  display: grid;
+  grid-column: 2 / 4;
+  grid-row: 3 / 3;
+  border-style: solid;
+  border-color: black; }
+
+.menu-dados {
+  background: tomato;
+  display: grid;
+  grid-template-areas: "item" "dados";
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 11% 11% 11% 11% 11% 11% 11% 11% 12%; }
+
+#Identificacao {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 1 / 1; }
+
+#led {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 2 / 2; }
+
+#inicializacoes {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 3 / 3; }
+
+#serial {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 4 / 4; }
+
+#software {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 5 / 5; }
+
+#ipInterno {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 6 / 6; }
+
+#ipCliente {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 7 / 7; }
+
+#tempoAtivo {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 8 / 8; }
+
+#navegador {
+  grid-area: item;
+  grid-column: 1 / 1;
+  grid-row: 9 / 9; }
+
+#dado-Identificacao {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 1 / 1; }
+
+#dado-led {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 2 / 2; }
+
+#dado-inicializacoes {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 3 / 3; }
+
+#dado-serial {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 4 / 4; }
+
+#dado-software {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 5 / 5; }
+
+#dado-ipInterno {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 6 / 6; }
+
+#dado-ipCliente {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 7 / 7; }
+
+#dado-tempoAtivo {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 8 / 8; }
+
+#dado-navegador {
+  grid-area: dados;
+  grid-column: 2 / 2;
+  grid-row: 9 / 9; }
+
+/*# sourceMappingURL=estilos.css.map */
