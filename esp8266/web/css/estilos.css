@@ -8,13 +8,16 @@
 
 .conteudo {
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: 11% 7% 60% 10%;
-  height: calc(90vh - 100px); }
+  grid-template-columns: 30% 20% 20% 30%;
+  grid-template-rows: 18% 10% 72%;
+  height: calc(70vh - 100px); }
 
 .menu-principal {
   grid-column: 2/ 4;
-  grid-row: 1 / 1; }
+  grid-row: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; }
 
 .menu {
   text-align: center;
@@ -36,13 +39,17 @@
 
 .mensagem {
   grid-column: 2 / 4;
-  grid-row: 2 / 2; }
+  grid-row: 2 / 2;
+  flex-direction: column;
+  justify-content: space-evenly; }
 
 .corpo-info {
   text-align: center;
-  border-style: solid;
+  border-right-style: solid;
+  border-left-style: solid;
+  justify-content: center;
   margin: 0;
-  padding: 0.5rem; }
+  padding: 0.8rem; }
 
 .corpo-dados {
   display: grid;
@@ -147,5 +154,22 @@
   grid-area: dados;
   grid-column: 2 / 2;
   grid-row: 9 / 9; }
+
+.rodape {
+  display: grid;
+  grid-template-columns: 30% 20% 20% 30%; }
+
+.base-Rodape {
+  grid-column: 2/ 4;
+  grid-row: 1 / 1; }
+
+.mensagem-rodape {
+  text-align: center;
+  margin: 0;
+  padding: 2rem;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-radius: 0 0 30px 30px; }
 
 /*# sourceMappingURL=estilos.css.map */
