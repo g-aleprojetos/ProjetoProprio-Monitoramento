@@ -1,0 +1,18 @@
+
+
+sass
+/** comando **/
+sass --watch style.scss:style.css
+
+compass
+/** comando **/
+compass watch style.scss
+
+obs: para funcionar o sass e o compass os comandos tem que ser digitados dentro do diretório que o arquivo está
+que nesse caso é a pasta css.
+
+importar as classes parao style.scss
+/** exemplos **/
+@import "helpers/variaveis";
+@import "helpers/mixins";
+@import "layout/rodape.scss";
