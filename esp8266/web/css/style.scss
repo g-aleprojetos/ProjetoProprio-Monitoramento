@@ -1,4 +1,7 @@
 @import "helpers/variaveis";
 @import "helpers/mixins";
-@import "style-sheet/logo/logo.scss";
 @import "style-sheet/body/body.scss";
+@import "style-sheet/header/cabecalho/cabecalho.scss";
+@import "style-sheet/header/logo/logo.scss";
+@import "style-sheet/header/menu/menu.scss";
+@import "style-sheet/header/menu/textos.scss";
