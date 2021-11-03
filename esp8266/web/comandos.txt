@@ -6,7 +6,7 @@ sass --watch style.scss:style.css
 
 compass
 /** comando **/
-compass watch style.scss
+compass watch css/style.scss
 
 obs: para funcionar o sass e o compass os comandos tem que ser digitados dentro do diretório que o arquivo está
 que nesse caso é a pasta css.
@@ -44,6 +44,8 @@ importar as classes parao style.scss
     @include border-radius(10px);
     @include box-shadow(black 0 2px 10px);
 ////////////////////////////////////////////////////////////
+  
+  
   Variáveis usdas no meu Sass
   /** exemplos **/
 
