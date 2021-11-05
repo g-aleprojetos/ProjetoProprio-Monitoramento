@@ -60,3 +60,4 @@ $tamanho-da-fonte-padrao: 16px;
 /** uso no código css **/
 background: rgba($cor-auxiliar, 0.8);
  
+
