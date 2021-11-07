@@ -1,4 +1,15 @@
 @import "helpers/variaveis";
 @import "helpers/mixins";
-@import "style-sheet/logo/logo.scss";
 @import "style-sheet/body/body.scss";
+@import "style-sheet/logo/logo.scss";
+@import "style-sheet/geral/geral/geral.scss";
+@import "style-sheet/geral/header/cabecalho/cabecalho.scss";
+@import "style-sheet/geral/header/menu/menu.scss";
+@import "style-sheet/geral/header/menu/textos.scss";
+@import "style-sheet/geral/main/mensagem/mensagem.scss";
+@import "style-sheet/geral/main/dados/corpo-dados.scss";
+
+
+
+@import "style-sheet/geral/footer/rodape/rodape.scss";
+@import "style-sheet/geral/footer/mensagem-rodape/mensagem-rodape.scss";
