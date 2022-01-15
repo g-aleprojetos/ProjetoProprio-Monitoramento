@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet } from './button.styled';
+import {Props, StyleSheet } from './button.styled';
 
 
-const Button: React.FC = () => {
+const Button: React.FC<Props> = ({children}) => {
   return(
-    <StyleSheet/>
+    <StyleSheet>{children}</StyleSheet>
   );
 }
 

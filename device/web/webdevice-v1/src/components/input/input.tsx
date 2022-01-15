@@ -1,8 +1,9 @@
 import React from 'react'
+import { StyleInput } from './input.style';
 
 const Input: React.FC = () =>{
   return(
-    <h2>Teste input</h2>
+    <StyleInput/>
   );
 };
 
