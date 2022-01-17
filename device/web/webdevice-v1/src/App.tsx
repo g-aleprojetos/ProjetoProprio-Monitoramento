@@ -1,15 +1,9 @@
 import React from 'react';
-import Button from './components/button'
-import Input from './components/input';
+import ConectarWiFi from './pages/conectarWiFi';
 
 function App() {
   return (
-    <>
-     <h1>WEB DEVICE</h1>
-     <Button>teste</Button>
-     <Input/>
-    </>
-   
+ <ConectarWiFi/>   
   );
 }
 
