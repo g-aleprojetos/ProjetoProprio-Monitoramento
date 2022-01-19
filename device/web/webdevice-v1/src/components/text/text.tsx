@@ -1,10 +1,10 @@
 import React from 'react'
+import { Props, TextoStyled } from './text.styled';
 
 
-const Text: React.FC = ()=>{
-  return(
-    <h1>text</h1>
-  );
+const Text: React.FC<Props> = ({...props})=>{
+  return<TextoStyled {...props} />;  
+  
 }
 
 export default Text;
