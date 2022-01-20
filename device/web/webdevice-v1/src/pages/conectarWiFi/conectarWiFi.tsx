@@ -7,16 +7,16 @@ import { ContainerBody } from './conectarWiFi.styled'
 const ConectarWiFi: React.FC = () => {
   return (
     <ContainerBody>
-      <h1>Conectar na Internet</h1>
-      <Button>AUTOMATICO</Button>
-      <Button>Manual</Button>
+      <h1><Text fontSize='30px'>Conectar na Internet</Text></h1>
+      <Button cursor= "pointer"><Text fontSize='18px'>Automático</Text></Button>
+      <Button cursor= "pointer"><Text fontSize='18px'>Manual</Text></Button>
 
       <Checkbox
         id='conectar'
         onChange={() => { }}
-        ><Text>Não conectar no WiFi.</Text></Checkbox>
+        ><Text fontSize='18px'>Não conectar no WiFi.</Text></Checkbox>
 
-      <Button>OK</Button>
+      <Button cursor= "pointer"><Text fontSize='18px'>Confirmar</Text></Button>
     </ContainerBody>
   );
 }
